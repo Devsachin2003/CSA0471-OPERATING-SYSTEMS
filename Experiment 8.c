@@ -1,61 +1,61 @@
-#include<stdio.h>
-main()
-{
-int q[20],p[50],c=0,c1,d,f,i,j,k=0,n,r,t,b[20],c2[20];
-printf("Enter no of pages:");
-scanf("%d",&n);
-printf("Enter the reference string:");
-for(i=0;i<n;i++)
-scanf("%d",&p[i]);
-printf("Enter no of frames:");
-scanf("%d",&f);
-q[k]=p[k];
-printf("\n\t%d\n",q[k]);
-c++;
-k++;
-for(i=1;i<n;i++)
-{
-c1=0;
-for(j=0;j<f;j++)
-{
-if(p[i]!=q[j])
-c1++;
-}
-if(c1==f)
-{c++;
-if(k<f)
-{q[k]=p[i];
-k++;
-for(j=0;j<k;j++)
-printf("
-\t%d",q[j]);
-printf("
-\n");
-}
-else
-{for(r=0;r<f;r++)
-{c2[r]=0;
-for(j=i
--1;j<n;j--
-)
-{if(q[r]!=p[j])
-c2[r]++;
-else
-break; }}
-for(r=0;r<f;r++)
-b[r]=c2[r];
-for(r=0;r<f;r++) {
-for(j=r;j<f;j++) {
-if(b[r]<b[j]) {
-t=b[r];
-b[r]=b[j];
-b[j]=t; }}}
-for(r=0;r<f;r++) {
-if(c2[r]==b[0])
-q[r]=p[i];
-printf("\t%d",q[r]);
-}
-printf("\n");
-}}}
-printf("\nThe no of page faults is %d",c);
+#include<stdio.h> 
+int findLRU(int time[], int n){ 
+int i, minimum = time[0], pos = 0; 
+for(i = 1; i < n; ++i){ 
+if(time[i] < minimum){ 
+minimum = time[i]; 
+pos = i; 
+} 
+} 
+return pos; 
+} 
+int main() 
+{ 
+int no_of_frames, no_of_pages, frames[10], pages[30], counter = 0, time[10], flag1, flag2, i, 
+j, pos, faults = 0; 
+printf("Enter number of frames: "); 
+scanf("%d", &no_of_frames); 
+printf("Enter number of pages: "); 
+scanf("%d", &no_of_pages); 
+printf("Enter reference string: "); 
+for(i = 0; i < no_of_pages; ++i){ 
+scanf("%d", &pages[i]); 
+} 
+for(i = 0; i < no_of_frames; ++i){ 
+frames[i] = -1; 
+} 
+for(i = 0; i < no_of_pages; ++i){ 
+flag1 = flag2 = 0; 
+for(j = 0; j < no_of_frames; ++j){ 
+if(frames[j] == pages[i]){ 
+counter++; 
+time[j] = counter; 
+flag1 = flag2 = 1; 
+break; 
+} 
+} 
+if(flag1 == 0){ 
+for(j = 0; j < no_of_frames; ++j){if(frames[j] == -1){ 
+counter++; 
+faults++; 
+frames[j] = pages[i]; 
+time[j] = counter; 
+flag2 = 1; 
+break; 
+} 
+} 
+} 
+if(flag2 == 0){ 
+pos = findLRU(time, no_of_frames); 
+counter++; 
+faults++; 
+frames[pos] = pages[i]; 
+time[pos] = counter; 
+} 
+printf("\n"); 
+for(j = 0; j < no_of_frames; ++j){ 
+printf("%d\t", frames[j]); 
+} 
+} 
+printf("\n\nTotal Page Faults = %d", faults);return 0; 
 }
