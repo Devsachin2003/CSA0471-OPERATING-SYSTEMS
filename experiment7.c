@@ -1,23 +1,25 @@
 #include<stdio.h>
-int main()
-{
-	char a;
-    FILE *fp;
-    printf("File name :");
-    scanf("%s",&a);
-    fp=fopen("a.txt","r");
-    if(!fp) 
-    {
-        printf("Error: File cannot be opened\n") ;
-        return 0;
-    }
-    printf("Position pointer in the beginning : %ld\n",ftell(fp));
-    char ch;
-    while(fread(&ch,sizeof(ch),1,fp)==1)
-    {
-        printf("%c",ch);
-    }
-    printf("\nSize of file in bytes is : %ld\n",ftell(fp));
-    fclose(fp);
-    return 0;
+#include<unistd.h>
+
+int main() {
+   int pipefds[2];
+   int returnstatus;
+   char writemessages[2][20]={"Hi", "Hello"};
+   char readmessage[20];
+   returnstatus = pipe(pipefds);
+   
+   if (returnstatus == -1) {
+      printf("Unable to create pipe\n");
+      return 1;
+   }
+   
+   printf("Writing to pipe - Message 1 is %s\n", writemessages[0]);
+   write(pipefds[1], writemessages[0], sizeof(writemessages[0]));
+   read(pipefds[0], readmessage, sizeof(readmessage));
+   printf("Reading from pipe – Message 1 is %s\n", readmessage);
+   printf("Writing to pipe - Message 2 is %s\n", writemessages[0]);
+   write(pipefds[1], writemessages[1], sizeof(writemessages[0]));
+   read(pipefds[0], readmessage, sizeof(readmessage));
+   printf("Reading from pipe – Message 2 is %s\n", readmessage);
+   return 0;
 }
